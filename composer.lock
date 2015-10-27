@@ -10,13 +10,13 @@
         {
             "name": "bluemesa/core-bundle",
             "version": "dev-master",
-            "target-dir": "Bluemesa/Bundle/CoreBundle",
             "source": {
                 "type": "git",
                 "url": "../core-bundle/",
-                "reference": "6e582f66efe0d720070c38c4a8dd5749d52f7603"
+                "reference": "84d68788ab763fb38d241abdb1bc69509bb80b59"
             },
             "require": {
+                "doctrine/common": "^2.4.8",
                 "jms/di-extra-bundle": "~1.6.0",
                 "knplabs/knp-paginator-bundle": "~2.5.0",
                 "php": ">=5.6.0",
@@ -50,7 +50,7 @@
                 "bluemesa",
                 "core"
             ],
-            "time": "2015-10-27 13:36:53"
+            "time": "2015-10-27 15:45:46"
         },
         {
             "name": "doctrine/annotations",

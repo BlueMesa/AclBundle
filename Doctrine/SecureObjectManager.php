@@ -65,6 +65,7 @@ class SecureObjectManager extends ObjectManager implements SecureObjectManagerIn
      */
     protected $isAutoAclEnabled;
     
+    
     /**
      * Construct SecureObjectManager
      */
@@ -82,6 +83,7 @@ class SecureObjectManager extends ObjectManager implements SecureObjectManagerIn
      */
     public function setUserProvider(UserProviderInterface $userProvider)
     {
+        echo "Setting User Provided!";
         $this->userProvider = $userProvider;
     }
     
@@ -94,6 +96,7 @@ class SecureObjectManager extends ObjectManager implements SecureObjectManagerIn
      */
     public function setAclProvider(MutableAclProviderInterface $aclProvider)
     {
+        echo "Setting Acl Provided!";
         $this->aclProvider = $aclProvider;
     }
     
