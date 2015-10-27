@@ -18,6 +18,7 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+use Bluemesa\Bundle\CoreBundle\Controller\CRUDController;
 use Bluemesa\Bundle\CoreBundle\Form\AclType;
 
 

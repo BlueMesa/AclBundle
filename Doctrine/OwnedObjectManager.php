@@ -23,7 +23,7 @@ use Symfony\Component\Security\Acl\Permission\MaskBuilder;
  *
  * @author Radoslaw Kamil Ejsmont <radoslaw@ejsmont.net>
  * 
- * @DI\Service("bluemesa.core.doctrine.manager")
+ * @DI\Service("bluemesa.acl.doctrine.owned_manager")
  * @DI\Tag("bluemesa_core.object_manager")
  */
 class OwnedObjectManager extends SecureObjectManager implements OwnedObjectManagerInterface

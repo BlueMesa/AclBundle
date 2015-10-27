@@ -35,7 +35,7 @@ use Bluemesa\Bundle\CoreBundle\Doctrine\ObjectManager;
  *
  * @author Radoslaw Kamil Ejsmont <radoslaw@ejsmont.net>
  * 
- * @DI\Service("bluemesa.core.doctrine.manager")
+ * @DI\Service("bluemesa.acl.doctrine.secure_manager")
  * @DI\Tag("bluemesa_core.object_manager")
  */
 class SecureObjectManager extends ObjectManager implements SecureObjectManagerInterface
@@ -69,7 +69,6 @@ class SecureObjectManager extends ObjectManager implements SecureObjectManagerIn
      * Construct SecureObjectManager
      *
      * @DI\InjectParams({
-     *     "managerRegistry" = @DI\Inject("doctrine"),
      *     "userProvider" = @DI\Inject("user_provider"),
      *     "aclProvider" = @DI\Inject("security.acl.provider"),
      *     "securityContext" = @DI\Inject("security.context", required=false)

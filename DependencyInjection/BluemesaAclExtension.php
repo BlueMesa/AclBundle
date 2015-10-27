@@ -31,10 +31,10 @@ class BluemesaAclExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
         
-        if (isset($config['acl_walker'])) {
-            $container->setParameter('bluemesa.acl.walker', $config['walker']);
+        if (isset($config['walker'])) {
+            $container->setParameter('bluemesa_acl.walker', $config['walker']);
         } else {
-            $container->setParameter('bluemesa.acl.walker', 'Bluemesa\AclBundle\Bridge\Doctrine\AclWalker');
+            $container->setParameter('bluemesa_acl.walker', 'Bluemesa\AclBundle\Bridge\Doctrine\AclWalker');
         }
     }
 }
