@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the BluemesaCoreBundle.
+
+Copyright (c) 2016 BlueMesa LabDB Contributors <labdb@bluemesa.eu>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+-->
+
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         syntaxCheck="false"
+         bootstrap="vendor/autoload.php">
+    <testsuites>
+        <testsuite name="Bundle Test Suite">
+            <directory>./Tests/</directory>
+        </testsuite>
+    </testsuites>
+
+</phpunit>
