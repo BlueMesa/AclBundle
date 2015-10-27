@@ -83,7 +83,6 @@ class SecureObjectManager extends ObjectManager implements SecureObjectManagerIn
      */
     public function setUserProvider(UserProviderInterface $userProvider)
     {
-        echo "Setting UserProvider to: " . get_class($userProvider) . "\n";
         $this->userProvider = $userProvider;
     }
     
@@ -96,7 +95,6 @@ class SecureObjectManager extends ObjectManager implements SecureObjectManagerIn
      */
     public function setAclProvider(MutableAclProviderInterface $aclProvider)
     {
-        echo "Setting AclProvider to: " . get_class($aclProvider) . "\n";
         $this->aclProvider = $aclProvider;
     }
     
@@ -109,7 +107,6 @@ class SecureObjectManager extends ObjectManager implements SecureObjectManagerIn
      */
     public function setSecurityContext(SecurityContextInterface $securityContext = null)
     {
-        echo "Setting SecurityContext to: " . get_class($securityContext) . "\n";
         $this->securityContext = $securityContext;
     }
     
