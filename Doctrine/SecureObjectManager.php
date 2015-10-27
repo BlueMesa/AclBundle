@@ -67,28 +67,46 @@ class SecureObjectManager extends ObjectManager implements SecureObjectManagerIn
     
     /**
      * Construct SecureObjectManager
+     */
+    public function __construct()
+    {
+        $this->isAutoAclEnabled = true;
+    }
+    
+    /**
+     * Set userProvider
      *
-     * @DI\InjectParams({
-     *     "userProvider" = @DI\Inject("user_provider"),
-     *     "aclProvider" = @DI\Inject("security.acl.provider"),
-     *     "securityContext" = @DI\Inject("security.context", required=false)
-     * })
+     * @DI\InjectParams({"userProvider" = @DI\Inject("user_provider")})
      * 
-     * @param Doctrine\Common\Persistence\ManagerRegistry                $managerRegistry
-     * @param Symfony\Component\Security\Core\User\UserProviderInterface $userProvider
+     * @param Symfony\Component\Security\Core\User\UserProviderInterface  $userProvider
+     */
+    public function setUserProvider(UserProviderInterface $userProvider)
+    {
+        $this->userProvider = $userProvider;
+    }
+    
+    /**
+     * Set aclProvider
+     *
+     * @DI\InjectParams({"aclProvider" = @DI\Inject("security.acl.provider")})
+     * 
      * @param Symfony\Component\Security\Acl\Model\AclProviderInterface  $aclProvider
+     */
+    public function setAclProvider(MutableAclProviderInterface $aclProvider)
+    {
+        $this->aclProvider = $aclProvider;
+    }
+    
+    /**
+     * Set securityContext
+     *
+     * @DI\InjectParams({"securityContext" = @DI\Inject("security.context", required=false)})
+     * 
      * @param Symfony\Component\Security\Core\SecurityContextInterface   $securityContext
      */
-    public function __construct(ManagerRegistry $managerRegistry,
-                                UserProviderInterface $userProvider,
-                                MutableAclProviderInterface $aclProvider,
-                                SecurityContextInterface $securityContext = null)
+    public function setSecurityContext(SecurityContextInterface $securityContext = null)
     {
-        parent::__construct($managerRegistry);
-        $this->userProvider = $userProvider;
-        $this->aclProvider = $aclProvider;
         $this->securityContext = $securityContext;
-        $this->isAutoAclEnabled = true;
     }
     
     /**
