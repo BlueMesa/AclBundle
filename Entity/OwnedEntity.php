@@ -12,13 +12,11 @@
 namespace Bluemesa\Bundle\AclBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as Serializer;
 
 /**
  * Secure Entity class
  *
  * @ORM\MappedSuperclass
- * @Serializer\ExclusionPolicy("all")
  *
  * @author Radoslaw Kamil Ejsmont <radoslaw@ejsmont.net>
  */
