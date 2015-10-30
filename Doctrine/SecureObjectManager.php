@@ -28,9 +28,9 @@ class SecureObjectManager extends ObjectManager implements SecureObjectManagerIn
     use SecureObjectManagerTrait;
     
     /**
-     * Class managed by this ObjectManager
+     * Interface that classes managed by this ObjectManager must implement
      */
-    const MANAGED_CLASS = 'Bluemesa\Bundle\AclBundle\Entity\SecureEntity';
+    const MANAGED_INTERFACE = 'Bluemesa\Bundle\AclBundle\Entity\SecureEntityInterface';
     
     
     /**
