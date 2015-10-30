@@ -12,7 +12,7 @@
 namespace Bluemesa\Bundle\AclBundle\DependencyInjection;
 
 use JMS\DiExtraBundle\Annotation as DI;
-
+use Symfony\Component\Security\Acl\Model\MutableAclProviderInterface;
 
 /**
  * AclProviderAwareTrait
