@@ -16,6 +16,6 @@ namespace Bluemesa\Bundle\AclBundle\Entity;
  *
  * @author Radoslaw Kamil Ejsmont <radoslaw@ejsmont.net>
  */
-interface OwnedEntityInterface
+interface OwnedEntityInterface extends SecureEntityInterface
 {
 }

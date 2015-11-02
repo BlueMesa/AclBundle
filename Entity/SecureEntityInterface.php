@@ -11,11 +11,14 @@
 
 namespace Bluemesa\Bundle\AclBundle\Entity;
 
+
+use Bluemesa\Bundle\CoreBundle\Entity\EntityInterface;
+
 /**
  * Secured entity interface
  *
  * @author Radoslaw Kamil Ejsmont <radoslaw@ejsmont.net>
  */
-interface SecureEntityInterface
+interface SecureEntityInterface extends EntityInterface
 {
 }
