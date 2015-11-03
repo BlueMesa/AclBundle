@@ -30,7 +30,7 @@ trait AclFilterAwareTrait {
     /**
      * Set the ACL filter service
      *
-     * @DI\InjectParams({ "aclFilter" = @DI\Inject("vib.security.filter.acl") })
+     * @DI\InjectParams({ "aclFilter" = @DI\Inject("bluemesa.acl.filter") })
      * 
      * @param VIB\SecurityBundle\Bridge\Doctrine\AclFilter $aclFilter
      */
