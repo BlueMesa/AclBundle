@@ -14,8 +14,8 @@ namespace Bluemesa\Bundle\AclBundle\Repository;
 
 use Bluemesa\Bundle\AclBundle\DependencyInjection\AclFilterAwareTrait;
 use Bluemesa\Bundle\CoreBundle\Filter\ListFilterInterface;
-use Bluemesa\Bundle\CoreBundle\Filter\SecureFilterInterface;
 use Bluemesa\Bundle\CoreBundle\Repository\EntityRepository as BaseEntityRepository;
+use Bluemesa\Bundle\AclBundle\Filter\SecureFilterInterface;
 
 
 /**
