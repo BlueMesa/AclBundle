@@ -67,7 +67,7 @@ class EntityRepository extends BaseEntityRepository
         }
         
         return (false === $permissions) ?
-            parnet::getCountQuery($filter) :
+            parent::getCountQuery($filter) :
             $this->getAclFilter()->apply($qb, $permissions, $user);
     }
 }
