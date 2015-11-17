@@ -45,7 +45,7 @@ class EntityRepository extends BaseEntityRepository
         }
 
         return (false === $permissions) ?
-            paret::getListQuery($filter) :
+            parent::getListQuery($filter) :
             $this->getAclFilter()->apply($qb, $permissions, $user);
     }
 
