@@ -39,9 +39,9 @@ abstract class SecureCRUDController extends CRUDController
      * @Template()
      * @Secure(roles="ROLE_USER, ROLE_ADMIN")
      */
-    public function listAction()
+    public function listAction(Request $request)
     {
-        return parent::listAction();
+        return parent::listAction($request);
     }
     
     /**
@@ -67,9 +67,9 @@ abstract class SecureCRUDController extends CRUDController
      * @Template()
      * @Secure(roles="ROLE_USER, ROLE_ADMIN")
      */
-    public function createAction()
+    public function createAction(Request $request)
     {
-        return parent::createAction();
+        return parent::createAction($request);
     }
 
     /**
@@ -78,12 +78,12 @@ abstract class SecureCRUDController extends CRUDController
      * @Route("/edit/{id}")
      * @Template()
      */
-    public function editAction($id)
+    public function editAction(Request $request, $id)
     {
         $entity = $this->getEntity($id);
         $this->verifyPermission($entity, 'EDIT');
         
-        return parent::editAction($entity);
+        return parent::editAction($request, $entity);
     }
 
     /**
@@ -92,12 +92,12 @@ abstract class SecureCRUDController extends CRUDController
      * @Route("/delete/{id}")
      * @Template()
      */
-    public function deleteAction($id)
+    public function deleteAction(Request $request, $id)
     {
         $entity = $this->getEntity($id);
         $this->verifyPermission($entity, 'DELETE');
         
-        return parent::deleteAction($entity);
+        return parent::deleteAction($request, $entity);
     }
 
     /**
@@ -109,14 +109,13 @@ abstract class SecureCRUDController extends CRUDController
      * @param  mixed                                      $id
      * @return Symfony\Component\HttpFoundation\Response
      */
-    public function permissionsAction($id)
+    public function permissionsAction(Request $request, $id)
     {
         $entity = $this->getEntity($id);
         $this->verifyPermission($entity, 'MASTER');
         $om = $this->getObjectManager();
         $data = $this->splitAcl($om->getACL($entity));        
         $form = $this->createForm(new AclType(), $data);
-        $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
             if ($form->isValid()) {
