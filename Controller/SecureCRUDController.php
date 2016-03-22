@@ -51,7 +51,7 @@ abstract class SecureCRUDController extends CRUDController
      * @Route("/show/{id}")
      * @Template()
      */
-    public function showAction($id)
+    public function showAction(Request $request, $id)
     {
         $entity = $this->getEntity($id);
         $this->verifyPermission($entity, 'VIEW');
