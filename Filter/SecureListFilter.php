@@ -12,7 +12,8 @@
 namespace Bluemesa\Bundle\AclBundle\Filter;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 use Bluemesa\Bundle\CoreBundle\Filter\ListFilterInterface;
 
@@ -24,19 +25,21 @@ use Bluemesa\Bundle\CoreBundle\Filter\ListFilterInterface;
 class SecureListFilter implements ListFilterInterface, SecureFilterInterface {
     
     protected $access;
-    
-    protected $securityContext;
+    protected $authorizationChecker;
+    protected $tokenStorage;
     
     /**
      * Construct SecureListFilter
      *
-     * @param Symfony\Component\HttpFoundation\Request $request
-     * @param Symfony\Component\Security\Core\SecurityContext $securityContext
+     * @param \Symfony\Component\HttpFoundation\Request                                            $request
+     * @param \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface         $authorizationChecker
+     * @param \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface  $tokenStorage
      */
-    public function __construct(Request $request = null, SecurityContextInterface $securityContext = null)
+    public function __construct(Request $request = null, AuthorizationCheckerInterface $authorizationChecker = null, TokenStorageInterface $tokenStorage = null)
     {
         $this->access = (null !== $request) ? $request->get('access', 'shared') : 'shared';
-        $this->securityContext = $securityContext;
+        $this->authorizationChecker = $authorizationChecker;
+        $this->tokenStorage = $tokenStorage;
     }
     
     /**
@@ -73,9 +76,9 @@ class SecureListFilter implements ListFilterInterface, SecureFilterInterface {
             return false;
             
         } else {
-            if (null !== $this->securityContext) {
+            if (null !== $this->authorizationChecker) {
                 
-                return $this->securityContext->isGranted('ROLE_ADMIN') ? false : array('VIEW');
+                return $this->authorizationChecker->isGranted('ROLE_ADMIN') ? false : array('VIEW');
                 
             } else {
                 
@@ -89,7 +92,7 @@ class SecureListFilter implements ListFilterInterface, SecureFilterInterface {
      */
     public function getUser()
     {
-        if ((null === $this->securityContext) || (null === $token = $this->securityContext->getToken())) {
+        if ((null === $this->tokenStorage) || (null === $token = $this->tokenStorage->getToken())) {
             
             return;
         }
