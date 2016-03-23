@@ -19,19 +19,29 @@ namespace Bluemesa\Bundle\AclBundle\Controller;
 trait SecureController
 {
     /**
-     * Get security context
+     * Get token storage
      *
-     * @return Symfony\Component\Security\Core\SecurityContextInterface
+     * @return \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface
      */
-    protected function getSecurityContext()
+    protected function getTokenStorage()
     {
-        return $this->get('security.context');
+        return $this->get('security.token_storage');
+    }
+
+    /**
+     * Get authorization checker
+     *
+     * @return \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface
+     */
+    protected function getAuthorizationChecker()
+    {
+        return $this->get('security.authorization_checker');
     }
 
     /**
      * Get ACL filter
      *
-     * @return VIB\SecurityBundle\Bridge\Doctrine\AclFilter
+     * @return \Bluemesa\Bundle\AclBundle\Bridge\Doctrine\AclFilter
      */
     protected function getAclFilter()
     {
