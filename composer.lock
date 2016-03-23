@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fc466808984643feb2f2a6b59a55b74f",
-    "content-hash": "e618cb26c82b20edacffda277cba79b9",
+    "hash": "e8eb785cac661894cc3c5c54eb8fc44a",
+    "content-hash": "cdc4e807ef7db8c25e3f68f66a4ae838",
     "packages": [
         {
             "name": "bluemesa/core-bundle",
@@ -13,7 +13,7 @@
             "source": {
                 "type": "git",
                 "url": "../core-bundle/",
-                "reference": "7863854730e5eb9a1c11f0b556b77e1900a8eb23"
+                "reference": "0090dcbe0c4f10d30a40eac1126d61519f3b8dab"
             },
             "require": {
                 "doctrine/common": "^2.4.8",
@@ -50,7 +50,7 @@
                 "bluemesa",
                 "core"
             ],
-            "time": "2016-03-22 15:14:56"
+            "time": "2016-03-22 16:49:47"
         },
         {
             "name": "doctrine/annotations",
@@ -2186,6 +2186,67 @@
             "time": "2016-02-26 06:06:39"
         },
         {
+            "name": "symfony/security-acl",
+            "version": "v2.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/security-acl.git",
+                "reference": "4a3f7327ad215242c78f6564ad4ea6d2db1b8347"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/security-acl/zipball/4a3f7327ad215242c78f6564ad4ea6d2db1b8347",
+                "reference": "4a3f7327ad215242c78f6564ad4ea6d2db1b8347",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9",
+                "symfony/security-core": "~2.4|~3.0.0"
+            },
+            "require-dev": {
+                "doctrine/common": "~2.2",
+                "doctrine/dbal": "~2.2",
+                "psr/log": "~1.0",
+                "symfony/phpunit-bridge": "~2.7|~3.0.0"
+            },
+            "suggest": {
+                "doctrine/dbal": "For using the built-in ACL implementation",
+                "symfony/class-loader": "For using the ACL generateSql script",
+                "symfony/finder": "For using the ACL generateSql script"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.8-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Security\\Acl\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Security Component - ACL (Access Control List)",
+            "homepage": "https://symfony.com",
+            "time": "2015-12-28 09:39:09"
+        },
+        {
             "name": "symfony/security-bundle",
             "version": "v3.0.3",
             "source": {
@@ -3013,16 +3074,16 @@
         },
         {
             "name": "phpunit/phpunit-mock-objects",
-            "version": "3.0.6",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "49bc700750196c04dd6bc2c4c99cb632b893836b"
+                "reference": "0a6d198af94d02956f2eb8bd59d5ab3166dc85da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/49bc700750196c04dd6bc2c4c99cb632b893836b",
-                "reference": "49bc700750196c04dd6bc2c4c99cb632b893836b",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/0a6d198af94d02956f2eb8bd59d5ab3166dc85da",
+                "reference": "0a6d198af94d02956f2eb8bd59d5ab3166dc85da",
                 "shasum": ""
             },
             "require": {
@@ -3040,7 +3101,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.0.x-dev"
+                    "dev-master": "3.1.x-dev"
                 }
             },
             "autoload": {
@@ -3065,7 +3126,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2015-12-08 08:47:06"
+            "time": "2016-03-09 13:33:49"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
