@@ -41,7 +41,7 @@ class AclFilter
      *
      * @DI\InjectParams({
      *     "doctrine" = @DI\Inject("doctrine"),
-     *     "securityContext" = @DI\Inject("security.token_storage"),
+     *     "tokenStorage" = @DI\Inject("security.token_storage"),
      *     "aclWalker" = @DI\Inject("%bluemesa_acl.walker%"),
      *     "roleHierarchy" = @DI\Inject("%security.role_hierarchy.roles%")
      * })
