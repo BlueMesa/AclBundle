@@ -22,7 +22,7 @@ use Symfony\Component\Security\Acl\Model\MutableAclProviderInterface;
 trait AclProviderAwareTrait {
     
     /**
-     * @var Symfony\Component\Security\Acl\Model\MutableAclProviderInterface
+     * @var \Symfony\Component\Security\Acl\Model\MutableAclProviderInterface
      */
     protected $aclProvider;
     
@@ -31,7 +31,7 @@ trait AclProviderAwareTrait {
      *
      * @DI\InjectParams({"aclProvider" = @DI\Inject("security.acl.provider")})
      * 
-     * @param Symfony\Component\Security\Acl\Model\AclProviderInterface  $aclProvider
+     * @param \Symfony\Component\Security\Acl\Model\AclProviderInterface  $aclProvider
      */
     public function setAclProvider(MutableAclProviderInterface $aclProvider)
     {

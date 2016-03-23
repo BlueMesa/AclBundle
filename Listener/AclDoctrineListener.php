@@ -31,7 +31,7 @@ use Bluemesa\Bundle\CoreBundle\Doctrine\ObjectManagerRegistry;
 class AclDoctrineListener {
     
     /**
-     * @var Bluemesa\Bundle\CoreBundle\Doctrine\ObjectManagerRegistry
+     * @var \Bluemesa\Bundle\CoreBundle\Doctrine\ObjectManagerRegistry
      */
     protected $registry;
     
@@ -43,7 +43,7 @@ class AclDoctrineListener {
      *     "registry" = @DI\Inject("bluemesa.core.doctrine.registry"),
      * })
      * 
-     * @param Bluemesa\Bundle\CoreBundle\Doctrine\ObjectManagerRegistry  $registry
+     * @param \Bluemesa\Bundle\CoreBundle\Doctrine\ObjectManagerRegistry  $registry
      */
     public function __construct(ObjectManagerRegistry $registry)
     {
@@ -52,7 +52,7 @@ class AclDoctrineListener {
     
     /**
      * 
-     * @param Doctrine\ORM\Event\LifecycleEventArgs $args
+     * @param \Doctrine\ORM\Event\LifecycleEventArgs  $args
      */
     public function preRemove(LifecycleEventArgs $args)
     {
@@ -68,7 +68,7 @@ class AclDoctrineListener {
     
     /**
      * 
-     * @param Doctrine\ORM\Event\LifecycleEventArgs $args
+     * @param \Doctrine\ORM\Event\LifecycleEventArgs  $args
      */
     public function postPersist(LifecycleEventArgs $args)
     {

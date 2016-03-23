@@ -11,17 +11,18 @@
 
 namespace Bluemesa\Bundle\AclBundle\Bridge\Doctrine;
 
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use JMS\DiExtraBundle\Annotation as DI;
 
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\DBAL\Platforms\SqlitePlatform;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 
 /**
  * Doctrine filter that applies ACL to fetched of entities
@@ -40,21 +41,26 @@ class AclFilter
      *
      * @DI\InjectParams({
      *     "doctrine" = @DI\Inject("doctrine"),
-     *     "securityContext" = @DI\Inject("security.context"),
+     *     "securityContext" = @DI\Inject("security.token_storage"),
      *     "aclWalker" = @DI\Inject("%bluemesa_acl.walker%"),
      *     "roleHierarchy" = @DI\Inject("%security.role_hierarchy.roles%")
      * })
      * 
-     * @param Doctrine\Common\Persistence\ManagerRegistry              $doctrine
-     * @param Symfony\Component\Security\Core\SecurityContextInterface $securityContext
-     * @param string                                                   $aclWalker
-     * @param array                                                    $roleHierarchy
+     * @param  \Doctrine\Common\Persistence\ManagerRegistry                                         $doctrine
+     * @param  \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface  $tokenStorage
+     * @param  string                                                                               $aclWalker
+     * @param  array                                                                                $roleHierarchy
+     * @throws \Exception
      */
     public function __construct(ManagerRegistry $doctrine,
-            SecurityContextInterface $securityContext, $aclWalker, $roleHierarchy)
+                                TokenStorageInterface $tokenStorage, $aclWalker, $roleHierarchy)
     {
-        $this->em = $doctrine->getManager();
-        $this->securityContext = $securityContext;
+        $em = $doctrine->getManager();
+        if (! $em instanceof EntityManager) {
+            throw new \Exception();
+        }
+        $this->em = $em;
+        $this->tokenStorage = $tokenStorage;
         $this->aclConnection = $doctrine->getConnection('default');
         $this->aclWalker = $aclWalker;
         $this->roleHierarchy = $roleHierarchy;
@@ -63,17 +69,17 @@ class AclFilter
     /**
      * Apply ACL filter
      *
-     * @param Doctrine\ORM\QueryBuilder | Doctrine\ORM\Query $query
-     * @param array                                          $permissions
-     * @param  string |
-     *         Symfony\Component\Security\Core\User\UserInterface $identity
-     * @param  string             $alias
-     * @return Doctrine\ORM\Query
+     * @param  \Doctrine\ORM\QueryBuilder | \Doctrine\ORM\Query              $query
+     * @param  array                                                         $permissions
+     * @param  \Symfony\Component\Security\Core\User\UserInterface | string  $identity
+     * @param  string                                                        $alias
+     * @throws \Exception
+     * @return \Doctrine\ORM\Query
      */
     public function apply($query, array $permissions = array("VIEW"), $identity = null, $alias = null)
     {
         if (null === $identity) {
-            $token = $this->securityContext->getToken();
+            $token = $this->tokenStorage->getToken();
             $identity = $token->getUser();
         }
 
@@ -114,9 +120,9 @@ class AclFilter
     /**
      * Get ACL filter SQL
      *
-     * @param  array   $classes
-     * @param  array   $identifiers
-     * @param  integer $mask
+     * @param  array    $classes
+     * @param  array    $identifiers
+     * @param  integer  $mask
      * @return string
      */
     private function getExtraQuery($classes, $identifiers, $mask)
@@ -151,9 +157,9 @@ SELECTQUERY;
     /**
      * Resolve DQL alias into class metadata
      *
-     * @param  Doctrine\ORM\Query $query
-     * @param  string             $alias
-     * @return array              | null
+     * @param  \Doctrine\ORM\Query  $query
+     * @param  string               $alias
+     * @return array | null
      */
     protected function getEntityFromAlias($query, $alias = null)
     {
@@ -194,16 +200,19 @@ SELECTQUERY;
     /**
      * Get ACL compatible classes for specified class metadata
      *
-     * @param  Doctrine\Common\Persistence\Mapping $metadata
+     * @param  \Doctrine\Common\Persistence\Mapping\ClassMetadata  $metadata
      * @return array
      */
     protected function getClasses(ClassMetadata $metadata)
     {
         $classes = array();
-        foreach ($metadata->subClasses as $subClass) {
-            $classes[] = '"' . str_replace('\\', '\\\\', $subClass) . '"';
+
+        if ($metadata instanceof ClassMetadataInfo) {
+            foreach ($metadata->subClasses as $subClass) {
+                $classes[] = '"' . str_replace('\\', '\\\\', $subClass) . '"';
+            }
+            $classes[] = '"' . str_replace('\\', '\\\\', $metadata->name) . '"';
         }
-        $classes[] = '"' . str_replace('\\', '\\\\', $metadata->name) . '"';
 
         return $classes;
     }
@@ -211,7 +220,7 @@ SELECTQUERY;
     /**
      * Get security identifiers associated with specified identity
      *
-     * @param  Symfony\Component\Security\Core\User\UserInterface | string $identity
+     * @param  \Symfony\Component\Security\Core\User\UserInterface | string  $identity
      * @return array
      */
     protected function getIdentifiers($identity)
@@ -219,7 +228,7 @@ SELECTQUERY;
         $userClass = array();
         if ($identity instanceof UserInterface) {
             $roles = $identity->getRoles();
-            $userClass[] = '"' . str_replace('\\', '\\\\', get_class($identity)) . '-' . $identity->getUserName() . '"';
+            $userClass[] = '"' . str_replace('\\', '\\\\', get_class($identity)) . '-' . $identity->getUsername() . '"';
         } elseif (is_string($identity)) {
             $roles = array($identity);
         } else {
@@ -238,10 +247,10 @@ SELECTQUERY;
     /**
      * Clone query
      *
-     * @param  Doctrine\ORM\AbstractQuery $query
-     * @return Doctrine\ORM\AbstractQuery
+     * @param  \Doctrine\ORM\Query  $query
+     * @return \Doctrine\ORM\Query
      */
-    protected function cloneQuery(AbstractQuery $query)
+    protected function cloneQuery(Query $query)
     {
         $aclAppliedQuery = clone $query;
         $params = $query->getParameters();
@@ -253,7 +262,7 @@ SELECTQUERY;
     /**
      * Get parent roles of the specified role
      *
-     * @param  string $role
+     * @param  string  $role
      * @return array
      */
     protected function resolveRoles($role)

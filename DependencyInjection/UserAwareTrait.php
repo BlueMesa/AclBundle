@@ -30,16 +30,18 @@ trait UserAwareTrait {
      */
     protected function getUser()
     {
-        if (null === $this->getSecurityContext()) {
+        if (null === $this->getTokenStorage()) {
             throw new \LogicException('The SecurityBundle is not registered in your application.');
         }
 
-        if (null === $token = $this->getSecurityContext()->getToken()) {
-            return;
+        if (null === $token = $this->getTokenStorage()->getToken()) {
+
+            return null;
         }
 
         if (!is_object($user = $token->getUser())) {
-            return;
+
+            return null;
         }
 
         return $user;
@@ -48,7 +50,7 @@ trait UserAwareTrait {
     /**
      * Get security context
      *
-     * @return Symfony\Component\Security\Core\SecurityContextInterface
+     * @return \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface
      */
-    abstract protected function getSecurityContext();
+    abstract protected function getTokenStorage();
 }

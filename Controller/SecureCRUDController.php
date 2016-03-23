@@ -11,6 +11,8 @@
 
 namespace Bluemesa\Bundle\AclBundle\Controller;
 
+use Bluemesa\Bundle\AclBundle\Doctrine\OwnedObjectManagerInterface;
+use Bluemesa\Bundle\AclBundle\Doctrine\SecureObjectManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use JMS\SecurityExtraBundle\Annotation\Secure;
@@ -20,7 +22,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 use Bluemesa\Bundle\CoreBundle\Controller\CRUDController;
-use Bluemesa\Bundle\CoreBundle\Form\AclType;
+use Bluemesa\Bundle\AclBundle\Form\AclType;
 
 
 /**
@@ -55,10 +57,11 @@ abstract class SecureCRUDController extends CRUDController
     {
         $entity = $this->getEntity($id);
         $this->verifyPermission($entity, 'VIEW');
+        /** @var SecureObjectManagerInterface | OwnedObjectManagerInterface $om */
         $om = $this->getObjectManager();
         $owner = $om->getOwner($entity);
         
-        return array_merge(parent::showAction($entity), array('owner' => $owner));
+        return array_merge(parent::showAction($request, $entity), array('owner' => $owner));
     }
 
     /**
@@ -107,29 +110,30 @@ abstract class SecureCRUDController extends CRUDController
      * @Route("/permissions/{id}")
      * @Template()
      *
-     * @param  mixed                                      $id
+     * @param  \Symfony\Component\HttpFoundation\Request   $request
+     * @param  mixed                                       $id
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function permissionsAction(Request $request, $id)
     {
+
         $entity = $this->getEntity($id);
         $this->verifyPermission($entity, 'MASTER');
+        /** @var SecureObjectManagerInterface | OwnedObjectManagerInterface $om */
         $om = $this->getObjectManager();
         $data = $this->splitAcl($om->getACL($entity));        
         $form = $this->createForm(new AclType(), $data);
-        if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $data = $form->getData();
-                $acl_array = array_merge($data['user_acl'], $data['role_acl']);
-                $om->updateACL($entity, $acl_array);
-                $message = 'Changes to ' . $this->getEntityName() . ' ' . $entity . ' permissions were saved.';
-                $this->addSessionFlash('success', $message);
-                $route = str_replace("_permissions", "_show", $request->attributes->get('_route'));
-                $url = $this->generateUrl($route, array('id' => $entity->getId()));
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $data = $form->getData();
+            $acl_array = array_merge($data['user_acl'], $data['role_acl']);
+            $om->updateACL($entity, $acl_array);
+            $message = 'Changes to ' . $this->getEntityName() . ' ' . $entity . ' permissions were saved.';
+            $this->addSessionFlash('success', $message);
+            $route = str_replace("_permissions", "_show", $request->attributes->get('_route'));
+            $url = $this->generateUrl($route, array('id' => $entity->getId()));
 
-                return $this->redirect($url);
-            }
+            return $this->redirect($url);
         }
 
         return array('form' => $form->createView(), 'entity' => $entity);
@@ -138,14 +142,16 @@ abstract class SecureCRUDController extends CRUDController
     /**
      * Verify that user has permission on entity
      * 
-     * @param type $entity
-     * @param type $permission
+     * @param  object                                                            $entity
+     * @param  string                                                            $permission
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      */
     protected function verifyPermission($entity, $permission)
     {
-        $securityContext = $this->getSecurityContext();
-        if (!($securityContext->isGranted('ROLE_ADMIN')||$securityContext->isGranted($permission, $entity))) {
+        $authorizationChecker = $this->getAuthorizationChecker();
+        if (!($authorizationChecker->isGranted('ROLE_ADMIN') ||
+            $authorizationChecker->isGranted($permission, $entity))) {
+
             throw new AccessDeniedException();
         }
     }
@@ -153,7 +159,7 @@ abstract class SecureCRUDController extends CRUDController
     /**
      * Merge user and group ACLs into single ACL
      * 
-     * @param array $acl_array
+     * @param  array $acl_array
      * @return array
      */
     protected function splitAcl($acl_array)

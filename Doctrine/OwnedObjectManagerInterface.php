@@ -21,16 +21,16 @@ interface OwnedObjectManagerInterface {
     /**
      * Get object's owner
      *
-     * @param  object                                             $object
-     * @return Symfony\Component\Security\Core\User\UserInterface
+     * @param  object                                               $object
+     * @return \Symfony\Component\Security\Core\User\UserInterface
      */
     public function getOwner($object);
     
     /**
      * Set object's owner
      *
-     * @param  object                                             $objects
-     * @param  Symfony\Component\Security\Core\User\UserInterface $owner
+     * @param  object                                               $objects
+     * @param  \Symfony\Component\Security\Core\User\UserInterface  $owner
      */
     public function setOwner($objects, $owner);
     
@@ -45,9 +45,9 @@ interface OwnedObjectManagerInterface {
     /**
      * Set object's group
      *
-     * @param  object                                             $objects
-     * @param  string                                             $group
-     * @return Symfony\Component\Security\Core\User\UserInterface
+     * @param  object                                               $objects
+     * @param  string                                               $group
+     * @return \Symfony\Component\Security\Core\User\UserInterface
      */
     public function setGroup($objects, $group);
     

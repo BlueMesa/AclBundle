@@ -29,8 +29,8 @@ class EntityRepository extends BaseEntityRepository
 
     /**
      *
-     * @param  Bluemesa\Bundle\CoreBundle\Filter\ListFilterInterface  $filter
-     * @return Doctrine\ORM\Query
+     * @param  \Bluemesa\Bundle\CoreBundle\Filter\ListFilterInterface  $filter
+     * @return \Doctrine\ORM\Query
      */
     public function getListQuery(ListFilterInterface $filter = null)
     {
@@ -51,8 +51,8 @@ class EntityRepository extends BaseEntityRepository
 
     /**
      *
-     * @param  Bluemesa\Bundle\CoreBundle\Filter\ListFilterInterface  $filter
-     * @return Doctrine\ORM\Query
+     * @param  \Bluemesa\Bundle\CoreBundle\Filter\ListFilterInterface  $filter
+     * @return \Doctrine\ORM\Query
      */
     public function getCountQuery(ListFilterInterface $filter = null)
     {

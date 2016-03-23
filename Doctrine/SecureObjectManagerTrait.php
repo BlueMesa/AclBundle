@@ -12,6 +12,8 @@
 namespace Bluemesa\Bundle\AclBundle\Doctrine;
 
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Security\Acl\Model\EntryInterface;
+use Symfony\Component\Security\Acl\Model\MutableAclInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
@@ -20,7 +22,8 @@ use Symfony\Component\Security\Acl\Domain\RoleSecurityIdentity;
 use Symfony\Component\Security\Acl\Exception\AclNotFoundException;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 
-use Bluemesa\Bundle\AclBundle\DependencyInjection\SecurityContextAwareTrait;
+use Bluemesa\Bundle\AclBundle\DependencyInjection\AuthorizationCheckerAwareTrait;
+use Bluemesa\Bundle\AclBundle\DependencyInjection\TokenStorageAwareTrait;
 use Bluemesa\Bundle\AclBundle\DependencyInjection\UserProviderAwareTrait;
 use Bluemesa\Bundle\AclBundle\DependencyInjection\AclProviderAwareTrait;
 use Bluemesa\Bundle\AclBundle\DependencyInjection\UserAwareTrait;
@@ -32,7 +35,7 @@ use Bluemesa\Bundle\AclBundle\DependencyInjection\UserAwareTrait;
  */
 trait SecureObjectManagerTrait
 {
-    use SecurityContextAwareTrait, UserProviderAwareTrait, AclProviderAwareTrait, UserAwareTrait;
+    use AuthorizationCheckerAwareTrait, TokenStorageAwareTrait, UserProviderAwareTrait, AclProviderAwareTrait, UserAwareTrait;
     
     /**
      * @var boolean
@@ -92,6 +95,7 @@ trait SecureObjectManagerTrait
      * Update ACL for object(s)
      *
      * @param object $objects
+     * @param array  $acl_array
      */
     public function updateACL($objects, array $acl_array)
     {
@@ -105,11 +109,13 @@ trait SecureObjectManagerTrait
             $objectIdentity = ObjectIdentity::fromDomainObject($object);
             try {
                 $acl = $aclProvider->findAcl($objectIdentity);
-                $diff = $this->diffACL($acl, $acl_array);
-                $this->updateAclEntries($acl, $diff['update']);
-                $this->deleteAclEntries($acl, $diff['delete']);
-                $this->insertAclEntries($acl, $diff['insert']);
-                $aclProvider->updateAcl($acl);
+                if ($acl instanceof MutableAclInterface) {
+                    $diff = $this->diffACL($acl, $acl_array);
+                    $this->updateAclEntries($acl, $diff['update']);
+                    $this->deleteAclEntries($acl, $diff['delete']);
+                    $this->insertAclEntries($acl, $diff['insert']);
+                    $aclProvider->updateAcl($acl);
+                }
             } catch (AclNotFoundException $e) {
                 $this->createACL($object, $acl_array);
             }
@@ -119,6 +125,7 @@ trait SecureObjectManagerTrait
     /**
      * Get ACL for object
      *
+     * @param  object  $object
      * @return array
      */
     public function getACL($object)
@@ -128,6 +135,10 @@ trait SecureObjectManagerTrait
         try {
             $acl = $aclProvider->findAcl($objectIdentity);
             $acl_array = array();
+            /**
+             * @var integer $index
+             * @var EntryInterface $ace
+             */
             foreach ($acl->getObjectAces() as $index => $ace) {
                 $identity = $this->resolveIdentity($ace);
                 $acl_array[$index] = array('identity' => $identity, 'permission' => $ace->getMask());
@@ -169,10 +180,10 @@ trait SecureObjectManagerTrait
     /**
      * Resolve ACE itentity to User or Role
      * 
-     * @param type $ace
+     * @param  \Symfony\Component\Security\Acl\Model\EntryInterface  $ace
      * @return mixed
      */
-    protected function resolveIdentity($ace)
+    protected function resolveIdentity(EntryInterface $ace)
     {
         $securityIdentity = $ace->getSecurityIdentity();
         if ($securityIdentity instanceof UserSecurityIdentity) {
@@ -181,28 +192,31 @@ trait SecureObjectManagerTrait
                 
                 return $userProvider->loadUserByUsername($securityIdentity->getUsername());
                 
-            } catch (UsernameNotFoundException $e) {
-                
-                return null;
-            }
+            } catch (UsernameNotFoundException $e) {}
         } elseif ($securityIdentity instanceof RoleSecurityIdentity) {
             
             return $securityIdentity->getRole();
         }
+
+        return null;
     }
     
     /**
      * Compare ACLs
      * 
-     * @param type $acl
-     * @param array $acl_array
+     * @param  \Symfony\Component\Security\Acl\Model\MutableAclInterface  $acl
+     * @param  array                                                      $acl_array
      * @return array
      */
-    protected function diffACL($acl, array $acl_array)
+    protected function diffACL(MutableAclInterface $acl, array $acl_array)
     {
         $insert = $acl_array;
         $update = array();
         $delete = array();
+        /**
+         * @var integer $index
+         * @var EntryInterface $ace
+         */
         foreach ($acl->getObjectAces() as $index => $ace) {
             $identity = $this->resolveIdentity($ace);
             $mask = $ace->getMask();
@@ -227,10 +241,10 @@ trait SecureObjectManagerTrait
     /**
      * Update ACL entries
      * 
-     * @param type $acl
-     * @param array $update
+     * @param \Symfony\Component\Security\Acl\Model\MutableAclInterface  $acl
+     * @param array                                                      $update
      */
-    protected function updateAclEntries($acl, array $update)
+    protected function updateAclEntries(MutableAclInterface $acl, array $update)
     {
         foreach ($update as $index => $entry) {
             $acl->updateObjectAce($index, $entry['permission']);
@@ -240,23 +254,23 @@ trait SecureObjectManagerTrait
     /**
      * Delete ACL entries
      * 
-     * @param type $acl
-     * @param array $delete
+     * @param \Symfony\Component\Security\Acl\Model\MutableAclInterface  $acl
+     * @param array                                                      $delete
      */
-    protected function deleteAclEntries($acl, array $delete)
+    protected function deleteAclEntries(MutableAclInterface $acl, array $delete)
     {
         foreach (array_reverse($delete, true) as $index => $entry) {
-            $acl->deleteObjectAce($index, $entry['permission']);
+            $acl->deleteObjectAce($index);
         }
     }
     
     /**
      * Insert ACL entries
      * 
-     * @param type $acl
-     * @param array $insert
+     * @param \Symfony\Component\Security\Acl\Model\MutableAclInterface  $acl
+     * @param array                                                     $insert
      */
-    protected function insertAclEntries($acl, array $insert)
+    protected function insertAclEntries(MutableAclInterface $acl, array $insert)
     {
         foreach ($insert as $entry) {
             $identity = $entry['identity'];
@@ -273,8 +287,8 @@ trait SecureObjectManagerTrait
     /**
      * Get default ACL
      * 
-     * @param object                                              $object
-     * @param Symfony\Component\Security\Core\User\UserInterface  $user
+     * @param  object                                               $object
+     * @param  \Symfony\Component\Security\Core\User\UserInterface  $user
      * @return array
      */
     public function getDefaultACL($object = null, $user = null)

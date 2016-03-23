@@ -23,7 +23,7 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 trait UserProviderAwareTrait {
     
     /**
-     * @var Symfony\Component\Security\Core\User\UserProviderInterface
+     * @var \Symfony\Component\Security\Core\User\UserProviderInterface
      */
     protected $userProvider;
     
@@ -32,7 +32,7 @@ trait UserProviderAwareTrait {
      *
      * @DI\InjectParams({"userProvider" = @DI\Inject("user_provider")})
      * 
-     * @param Symfony\Component\Security\Core\User\UserProviderInterface  $userProvider
+     * @param \Symfony\Component\Security\Core\User\UserProviderInterface  $userProvider
      */
     public function setUserProvider(UserProviderInterface $userProvider)
     {

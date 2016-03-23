@@ -67,8 +67,8 @@ interface SecureObjectManagerInterface {
     /**
      * Get default ACL
      * 
-     * @param object                                              $object
-     * @param Symfony\Component\Security\Core\User\UserInterface  $user
+     * @param object                                               $object
+     * @param \Symfony\Component\Security\Core\User\UserInterface  $user
      * @return array
      */
     public function getDefaultACL($object = null, $user = null);
