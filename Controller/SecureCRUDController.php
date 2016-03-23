@@ -108,7 +108,7 @@ abstract class SecureCRUDController extends CRUDController
      * @Template()
      *
      * @param  mixed                                      $id
-     * @return Symfony\Component\HttpFoundation\Response
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function permissionsAction(Request $request, $id)
     {
@@ -140,7 +140,7 @@ abstract class SecureCRUDController extends CRUDController
      * 
      * @param type $entity
      * @param type $permission
-     * @throws Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      */
     protected function verifyPermission($entity, $permission)
     {
