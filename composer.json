@@ -21,15 +21,15 @@
   },
   "require": {
     "php": ">=5.6.0",
-    "symfony/framework-bundle": "~2.7",
-    "symfony/security-acl": "~2.7",
-    "symfony/form": "~2.7",
-    "symfony/validator": "~2.7",
+    "symfony/framework-bundle": "~3.0",
+    "symfony/security-acl": "~3.0",
+    "symfony/form": "~3.0",
+    "symfony/validator": "~3.0",
     "sensio/framework-extra-bundle": "~3.0",
-    "doctrine/common": "^2.4.8",
-    "doctrine/orm": "^2.4.8",
-    "jms/di-extra-bundle": "~1.6.0",
-    "jms/security-extra-bundle": "~1.5.1",
+    "doctrine/common": "~2.5",
+    "doctrine/orm": "~2.5",
+    "jms/di-extra-bundle": "~1.6",
+    "jms/security-extra-bundle": "~1.5",
     "bluemesa/core-bundle": "dev-master"
   },
   "require-dev": {
