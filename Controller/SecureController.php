@@ -11,6 +11,13 @@
 
 namespace Bluemesa\Bundle\AclBundle\Controller;
 
+use Bluemesa\Bundle\AclBundle\Bridge\Doctrine\AclFilter;
+use LogicException;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+
+
 /**
  * Methods for secure controllers
  *
@@ -21,30 +28,53 @@ trait SecureController
     /**
      * Get token storage
      *
-     * @return \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface
+     * @deprecated Use getUser method from Controller directly
+     *
+     * @return TokenStorageInterface
+     * @throws LogicException
      */
     protected function getTokenStorage()
     {
-        return $this->get('security.token_storage');
+        if (!$this instanceof Controller) {
+            throw new LogicException('This method can only be used in controllers.');
+        }
+        if (!$this->container->has('security.token_storage')) {
+            throw new LogicException('The SecurityBundle is not registered in your application.');
+        }
+
+        return $this->container->get('security.token_storage');
     }
 
     /**
      * Get authorization checker
      *
-     * @return \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface
+     * @deprecated Use isGranted method from Controller directly
+     *
+     * @return AuthorizationCheckerInterface
      */
     protected function getAuthorizationChecker()
     {
-        return $this->get('security.authorization_checker');
+        if (!$this instanceof Controller) {
+            throw new LogicException('This method can only be used in controllers.');
+        }
+        if (!$this->container->has('security.authorization_checker')) {
+            throw new LogicException('The SecurityBundle is not registered in your application.');
+        }
+
+        return $this->container->get('security.authorization_checker');
     }
 
     /**
      * Get ACL filter
      *
-     * @return \Bluemesa\Bundle\AclBundle\Bridge\Doctrine\AclFilter
+     * @return AclFilter
      */
     protected function getAclFilter()
     {
-        return $this->get('bluemesa.acl.filter');
+        if (!$this instanceof Controller) {
+            throw new LogicException('This method can only be used in controllers.');
+        }
+
+        return $this->container->get('bluemesa.acl.filter');
     }
 }

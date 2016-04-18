@@ -17,7 +17,7 @@ use Doctrine\ORM\Query\SqlWalker;
  * The AclWalker is a TreeWalker that walks over a DQL AST and constructs
  * the corresponding SQL.
  *
- * @link https://gist.github.com/mailaneel/1363377 Original code on gist
+ * @see https://gist.github.com/mailaneel/1363377  Original gist on GitHub
  *
  * @author Radoslaw Kamil Ejsmont <radoslaw@ejsmont.net>
  * @author mailaneel

@@ -18,6 +18,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -57,7 +58,7 @@ abstract class SecureCRUDController extends CRUDController
     {
         $entity = $this->getEntity($id);
         $this->verifyPermission($entity, 'VIEW');
-        /** @var SecureObjectManagerInterface | OwnedObjectManagerInterface $om */
+        /** @var SecureObjectManagerInterface|OwnedObjectManagerInterface $om */
         $om = $this->getObjectManager();
         $owner = $om->getOwner($entity);
         
@@ -110,16 +111,16 @@ abstract class SecureCRUDController extends CRUDController
      * @Route("/permissions/{id}")
      * @Template()
      *
-     * @param  \Symfony\Component\HttpFoundation\Request   $request
-     * @param  mixed                                       $id
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param  Request   $request
+     * @param  mixed     $id
+     * @return Response
      */
     public function permissionsAction(Request $request, $id)
     {
 
         $entity = $this->getEntity($id);
         $this->verifyPermission($entity, 'MASTER');
-        /** @var SecureObjectManagerInterface | OwnedObjectManagerInterface $om */
+        /** @var SecureObjectManagerInterface|OwnedObjectManagerInterface $om */
         $om = $this->getObjectManager();
         $data = $this->splitAcl($om->getACL($entity));        
         $form = $this->createForm(new AclType(), $data);
@@ -142,15 +143,14 @@ abstract class SecureCRUDController extends CRUDController
     /**
      * Verify that user has permission on entity
      * 
-     * @param  object                                                            $entity
-     * @param  string                                                            $permission
-     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @param  object                 $entity
+     * @param  string                 $permission
+     * @throws AccessDeniedException
      */
     protected function verifyPermission($entity, $permission)
     {
-        $authorizationChecker = $this->getAuthorizationChecker();
-        if (!($authorizationChecker->isGranted('ROLE_ADMIN') ||
-            $authorizationChecker->isGranted($permission, $entity))) {
+        if (!($this->isGranted('ROLE_ADMIN') ||
+            $this->isGranted($permission, $entity))) {
 
             throw new AccessDeniedException();
         }
@@ -159,7 +159,7 @@ abstract class SecureCRUDController extends CRUDController
     /**
      * Merge user and group ACLs into single ACL
      * 
-     * @param  array $acl_array
+     * @param  array  $acl_array
      * @return array
      */
     protected function splitAcl($acl_array)

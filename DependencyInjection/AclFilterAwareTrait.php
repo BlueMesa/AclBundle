@@ -22,7 +22,7 @@ use Bluemesa\Bundle\AclBundle\Bridge\Doctrine\AclFilter;
 trait AclFilterAwareTrait {
     
     /**
-     * @var \Bluemesa\Bundle\AclBundle\Bridge\Doctrine\AclFilter  $aclFilter
+     * @var AclFilter  $aclFilter
      */
     protected $aclFilter;
     
@@ -32,7 +32,7 @@ trait AclFilterAwareTrait {
      *
      * @DI\InjectParams({ "aclFilter" = @DI\Inject("bluemesa.acl.filter") })
      * 
-     * @param \Bluemesa\Bundle\AclBundle\Bridge\Doctrine\AclFilter  $aclFilter
+     * @param AclFilter  $aclFilter
      */
     public function setAclFilter(AclFilter $aclFilter)
     {
@@ -42,7 +42,7 @@ trait AclFilterAwareTrait {
     /**
      * Return the ACL filter service
      * 
-     * @return \Bluemesa\Bundle\AclBundle\Bridge\Doctrine\AclFilter
+     * @return AclFilter
      */
     protected function getAclFilter()
     {

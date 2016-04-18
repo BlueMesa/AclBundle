@@ -10,6 +10,7 @@
  */
 
 namespace Bluemesa\Bundle\AclBundle\Doctrine;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Ownership aware ObjectManagerInterface
@@ -21,23 +22,23 @@ interface OwnedObjectManagerInterface {
     /**
      * Get object's owner
      *
-     * @param  object                                               $object
-     * @return \Symfony\Component\Security\Core\User\UserInterface
+     * @param  object         $object
+     * @return UserInterface
      */
     public function getOwner($object);
     
     /**
      * Set object's owner
      *
-     * @param  object                                               $objects
-     * @param  \Symfony\Component\Security\Core\User\UserInterface  $owner
+     * @param  object         $objects
+     * @param  UserInterface  $owner
      */
     public function setOwner($objects, $owner);
     
     /**
      * Get object's group
      *
-     * @param  object $object
+     * @param  object  $object
      * @return string
      */
     public function getGroup($object);
@@ -45,9 +46,9 @@ interface OwnedObjectManagerInterface {
     /**
      * Set object's group
      *
-     * @param  object                                               $objects
-     * @param  string                                               $group
-     * @return \Symfony\Component\Security\Core\User\UserInterface
+     * @param  object         $objects
+     * @param  string         $group
+     * @return UserInterface
      */
     public function setGroup($objects, $group);
     

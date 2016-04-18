@@ -23,16 +23,16 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 trait AuthorizationCheckerAwareTrait {
     
     /**
-     * @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface
+     * @var AuthorizationCheckerInterface
      */
     protected $authorizationChecker;
     
     /**
-     * Set securityContext
+     * Set authorizationChecker
      *
      * @DI\InjectParams({"authorizationChecker" = @DI\Inject("security.authorization_checker", required=false)})
      * 
-     * @param \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface  $authorizationChecker
+     * @param AuthorizationCheckerInterface  $authorizationChecker
      */
     public function setAuthorizationChecker(AuthorizationCheckerInterface $authorizationChecker = null)
     {
@@ -40,9 +40,9 @@ trait AuthorizationCheckerAwareTrait {
     }
     
     /**
-     * Get security context
+     * Get authorizationChecker
      *
-     * @return \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface
+     * @return AuthorizationCheckerInterface
      */
     protected function getAuthorizationChecker()
     {

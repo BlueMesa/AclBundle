@@ -11,6 +11,7 @@
 
 namespace Bluemesa\Bundle\AclBundle\Doctrine;
 
+use Bluemesa\Bundle\AclBundle\Entity\OwnedEntityInterface;
 use JMS\DiExtraBundle\Annotation as DI;
 
 
@@ -27,7 +28,7 @@ class OwnedObjectManager extends SecureObjectManager implements OwnedObjectManag
     use OwnedObjectManagerTrait;
     
     /**
-     * Interface that classes managed by this ObjectManager must implement
+     * {@inheritdoc}
      */
-    const MANAGED_INTERFACE = 'Bluemesa\Bundle\AclBundle\Entity\OwnedEntityInterface';
+    const MANAGED_INTERFACE = OwnedEntityInterface::class;
 }

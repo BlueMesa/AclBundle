@@ -12,6 +12,8 @@
 namespace Bluemesa\Bundle\AclBundle\DependencyInjection;
 
 use JMS\DiExtraBundle\Annotation as DI;
+use LogicException;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 
 /**
@@ -24,14 +26,14 @@ trait UserAwareTrait {
     /**
      * Get user from the Security Context
      *
-     * @throws \LogicException If SecurityBundle is not available
+     * @throws LogicException  If SecurityBundle is not available
      * 
      * @return mixed
      */
     protected function getUser()
     {
         if (null === $this->getTokenStorage()) {
-            throw new \LogicException('The SecurityBundle is not registered in your application.');
+            throw new LogicException('The SecurityBundle is not registered in your application.');
         }
 
         if (null === $token = $this->getTokenStorage()->getToken()) {
@@ -48,9 +50,9 @@ trait UserAwareTrait {
     }
     
     /**
-     * Get security context
+     * Get tokenStorage
      *
-     * @return \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface
+     * @return TokenStorageInterface
      */
     abstract protected function getTokenStorage();
 }

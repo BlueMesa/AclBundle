@@ -11,10 +11,12 @@
 
 namespace Bluemesa\Bundle\AclBundle\Form;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Bluemesa\Bundle\AclBundle\Validator\Constraints\UniqueOwnerIdentity;
 use Bluemesa\Bundle\AclBundle\Validator\Constraints\UniqueIdentities;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\FormBuilderInterface;
+
 
 /**
  * AclType class
@@ -26,18 +28,10 @@ class AclType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getName()
-    {
-        return "acl";
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('user_acl', 'collection', array(
-                        'type' => new UserAceType(),
+        $builder->add('user_acl', CollectionType::class, array(
+                        'type' => UserAceType::class,
                         'allow_add' => true,
                         'allow_delete' => true,
                         'prototype' => true,
@@ -50,8 +44,8 @@ class AclType extends AbstractType
                         'constraints' => array(
                             new UniqueOwnerIdentity('Only one user can be the owner.'),
                             new UniqueIdentities('Each user can be specified only once.'))))
-                ->add('role_acl', 'collection', array(
-                        'type' => new RoleAceType(),
+                ->add('role_acl', CollectionType::class, array(
+                        'type' => RoleAceType::class,
                         'allow_add' => true,
                         'allow_delete' => true,
                         'prototype' => true,

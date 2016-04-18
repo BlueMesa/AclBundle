@@ -23,16 +23,16 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 trait TokenStorageAwareTrait {
     
     /**
-     * @var \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface
+     * @var TokenStorageInterface
      */
     protected $tokenStorage;
     
     /**
-     * Set securityContext
+     * Set tokenStorage
      *
      * @DI\InjectParams({"tokenStorage" = @DI\Inject("security.token_storage", required=false)})
      * 
-     * @param \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface  $tokenStorage
+     * @param TokenStorageInterface  $tokenStorage
      */
     public function setTokenStorage(TokenStorageInterface $tokenStorage = null)
     {
@@ -40,9 +40,9 @@ trait TokenStorageAwareTrait {
     }
     
     /**
-     * Get security context
+     * Get tokenStorage
      *
-     * @return \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface
+     * @return TokenStorageInterface
      */
     protected function getTokenStorage()
     {

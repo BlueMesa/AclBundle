@@ -26,14 +26,6 @@ class RoleAceType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getName()
-    {
-        return "role_ace";
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('identity', 'role_typeahead', array(

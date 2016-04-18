@@ -136,7 +136,7 @@ trait SecureObjectManagerTrait
             $acl = $aclProvider->findAcl($objectIdentity);
             $acl_array = array();
             /**
-             * @var integer $index
+             * @var integer        $index
              * @var EntryInterface $ace
              */
             foreach ($acl->getObjectAces() as $index => $ace) {
@@ -180,7 +180,7 @@ trait SecureObjectManagerTrait
     /**
      * Resolve ACE itentity to User or Role
      * 
-     * @param  \Symfony\Component\Security\Acl\Model\EntryInterface  $ace
+     * @param  EntryInterface  $ace
      * @return mixed
      */
     protected function resolveIdentity(EntryInterface $ace)
@@ -204,8 +204,8 @@ trait SecureObjectManagerTrait
     /**
      * Compare ACLs
      * 
-     * @param  \Symfony\Component\Security\Acl\Model\MutableAclInterface  $acl
-     * @param  array                                                      $acl_array
+     * @param  MutableAclInterface  $acl
+     * @param  array                $acl_array
      * @return array
      */
     protected function diffACL(MutableAclInterface $acl, array $acl_array)
@@ -241,8 +241,8 @@ trait SecureObjectManagerTrait
     /**
      * Update ACL entries
      * 
-     * @param \Symfony\Component\Security\Acl\Model\MutableAclInterface  $acl
-     * @param array                                                      $update
+     * @param MutableAclInterface  $acl
+     * @param array                $update
      */
     protected function updateAclEntries(MutableAclInterface $acl, array $update)
     {
@@ -254,8 +254,8 @@ trait SecureObjectManagerTrait
     /**
      * Delete ACL entries
      * 
-     * @param \Symfony\Component\Security\Acl\Model\MutableAclInterface  $acl
-     * @param array                                                      $delete
+     * @param MutableAclInterface  $acl
+     * @param array                $delete
      */
     protected function deleteAclEntries(MutableAclInterface $acl, array $delete)
     {
@@ -267,8 +267,8 @@ trait SecureObjectManagerTrait
     /**
      * Insert ACL entries
      * 
-     * @param \Symfony\Component\Security\Acl\Model\MutableAclInterface  $acl
-     * @param array                                                     $insert
+     * @param MutableAclInterface  $acl
+     * @param array                $insert
      */
     protected function insertAclEntries(MutableAclInterface $acl, array $insert)
     {
@@ -287,8 +287,8 @@ trait SecureObjectManagerTrait
     /**
      * Get default ACL
      * 
-     * @param  object                                               $object
-     * @param  \Symfony\Component\Security\Core\User\UserInterface  $user
+     * @param  object         $object
+     * @param  UserInterface  $user
      * @return array
      */
     public function getDefaultACL($object = null, $user = null)

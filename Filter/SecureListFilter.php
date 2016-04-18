@@ -31,11 +31,13 @@ class SecureListFilter implements ListFilterInterface, SecureFilterInterface {
     /**
      * Construct SecureListFilter
      *
-     * @param \Symfony\Component\HttpFoundation\Request                                            $request
-     * @param \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface         $authorizationChecker
-     * @param \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface  $tokenStorage
+     * @param Request                        $request
+     * @param AuthorizationCheckerInterface  $authorizationChecker
+     * @param TokenStorageInterface          $tokenStorage
      */
-    public function __construct(Request $request = null, AuthorizationCheckerInterface $authorizationChecker = null, TokenStorageInterface $tokenStorage = null)
+    public function __construct(Request $request = null,
+                                AuthorizationCheckerInterface $authorizationChecker = null,
+                                TokenStorageInterface $tokenStorage = null)
     {
         $this->access = (null !== $request) ? $request->get('access', 'shared') : 'shared';
         $this->authorizationChecker = $authorizationChecker;

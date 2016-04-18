@@ -11,6 +11,7 @@
 
 namespace Bluemesa\Bundle\AclBundle\Doctrine;
 
+use Bluemesa\Bundle\AclBundle\Entity\SecureEntityInterface;
 use JMS\DiExtraBundle\Annotation as DI;
 use Bluemesa\Bundle\CoreBundle\Doctrine\ObjectManager;
 
@@ -28,9 +29,9 @@ class SecureObjectManager extends ObjectManager implements SecureObjectManagerIn
     use SecureObjectManagerTrait;
     
     /**
-     * Interface that classes managed by this ObjectManager must implement
+     * {@inheritdoc}
      */
-    const MANAGED_INTERFACE = 'Bluemesa\Bundle\AclBundle\Entity\SecureEntityInterface';
+    const MANAGED_INTERFACE = SecureEntityInterface::class;
     
     
     /**

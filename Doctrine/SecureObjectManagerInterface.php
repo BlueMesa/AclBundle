@@ -10,6 +10,7 @@
  */
 
 namespace Bluemesa\Bundle\AclBundle\Doctrine;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * ACL aware ObjectManagerInterface
@@ -67,8 +68,8 @@ interface SecureObjectManagerInterface {
     /**
      * Get default ACL
      * 
-     * @param object                                               $object
-     * @param \Symfony\Component\Security\Core\User\UserInterface  $user
+     * @param object         $object
+     * @param UserInterface  $user
      * @return array
      */
     public function getDefaultACL($object = null, $user = null);

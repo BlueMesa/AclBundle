@@ -13,6 +13,7 @@ namespace Bluemesa\Bundle\AclBundle\Bridge\Doctrine;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Exception;
 use JMS\DiExtraBundle\Annotation as DI;
 
 use Doctrine\ORM\Query;
@@ -46,18 +47,18 @@ class AclFilter
      *     "roleHierarchy" = @DI\Inject("%security.role_hierarchy.roles%")
      * })
      * 
-     * @param  \Doctrine\Common\Persistence\ManagerRegistry                                         $doctrine
-     * @param  \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface  $tokenStorage
-     * @param  string                                                                               $aclWalker
-     * @param  array                                                                                $roleHierarchy
-     * @throws \Exception
+     * @param  ManagerRegistry        $doctrine
+     * @param  TokenStorageInterface  $tokenStorage
+     * @param  string                 $aclWalker
+     * @param  array                  $roleHierarchy
+     * @throws Exception
      */
     public function __construct(ManagerRegistry $doctrine,
                                 TokenStorageInterface $tokenStorage, $aclWalker, $roleHierarchy)
     {
         $em = $doctrine->getManager();
         if (! $em instanceof EntityManager) {
-            throw new \Exception();
+            throw new Exception();
         }
         $this->em = $em;
         $this->tokenStorage = $tokenStorage;
@@ -69,12 +70,12 @@ class AclFilter
     /**
      * Apply ACL filter
      *
-     * @param  \Doctrine\ORM\QueryBuilder | \Doctrine\ORM\Query              $query
-     * @param  array                                                         $permissions
-     * @param  \Symfony\Component\Security\Core\User\UserInterface | string  $identity
-     * @param  string                                                        $alias
-     * @throws \Exception
-     * @return \Doctrine\ORM\Query
+     * @param  QueryBuilder|Query    $query
+     * @param  array                 $permissions
+     * @param  UserInterface|string  $identity
+     * @param  string                $alias
+     * @return Query
+     * @throws Exception
      */
     public function apply($query, array $permissions = array("VIEW"), $identity = null, $alias = null)
     {
@@ -88,7 +89,7 @@ class AclFilter
         } elseif ($query instanceof Query) {
             $query = $this->cloneQuery($query);
         } else {
-            throw new \Exception();
+            throw new Exception();
         }
 
         $maskBuilder = new MaskBuilder();
@@ -157,9 +158,9 @@ SELECTQUERY;
     /**
      * Resolve DQL alias into class metadata
      *
-     * @param  \Doctrine\ORM\Query  $query
-     * @param  string               $alias
-     * @return array | null
+     * @param  Query       $query
+     * @param  string      $alias
+     * @return array|null
      */
     protected function getEntityFromAlias($query, $alias = null)
     {
@@ -200,7 +201,7 @@ SELECTQUERY;
     /**
      * Get ACL compatible classes for specified class metadata
      *
-     * @param  \Doctrine\Common\Persistence\Mapping\ClassMetadata  $metadata
+     * @param  ClassMetadata  $metadata
      * @return array
      */
     protected function getClasses(ClassMetadata $metadata)
@@ -220,7 +221,7 @@ SELECTQUERY;
     /**
      * Get security identifiers associated with specified identity
      *
-     * @param  \Symfony\Component\Security\Core\User\UserInterface | string  $identity
+     * @param  UserInterface|string  $identity
      * @return array
      */
     protected function getIdentifiers($identity)
@@ -247,8 +248,8 @@ SELECTQUERY;
     /**
      * Clone query
      *
-     * @param  \Doctrine\ORM\Query  $query
-     * @return \Doctrine\ORM\Query
+     * @param  Query  $query
+     * @return Query
      */
     protected function cloneQuery(Query $query)
     {

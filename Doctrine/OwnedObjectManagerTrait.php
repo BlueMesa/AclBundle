@@ -26,8 +26,8 @@ trait OwnedObjectManagerTrait
     /**
      * Get object's owner
      *
-     * @param  object                                               $object
-     * @return \Symfony\Component\Security\Core\User\UserInterface
+     * @param  object         $object
+     * @return UserInterface
      */
     public function getOwner($object)
     {
@@ -47,8 +47,8 @@ trait OwnedObjectManagerTrait
     /**
      * Set object's owner
      *
-     * @param  object                                               $objects
-     * @param  \Symfony\Component\Security\Core\User\UserInterface  $owner
+     * @param  object         $objects
+     * @param  UserInterface  $owner
      */
     public function setOwner($objects, $owner)
     {
@@ -81,7 +81,7 @@ trait OwnedObjectManagerTrait
     /**
      * Get object's group
      *
-     * @param  object $object
+     * @param  object  $object
      * @return string
      */
     public function getGroup($object)
@@ -102,9 +102,9 @@ trait OwnedObjectManagerTrait
     /**
      * Set object's group
      *
-     * @param  object                                               $objects
-     * @param  string                                               $group
-     * @return \Symfony\Component\Security\Core\User\UserInterface
+     * @param  object         $objects
+     * @param  string         $group
+     * @return UserInterface
      */
     public function setGroup($objects, $group)
     {
