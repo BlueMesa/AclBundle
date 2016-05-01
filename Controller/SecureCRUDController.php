@@ -123,7 +123,7 @@ abstract class SecureCRUDController extends CRUDController
         /** @var SecureObjectManagerInterface|OwnedObjectManagerInterface $om */
         $om = $this->getObjectManager();
         $data = $this->splitAcl($om->getACL($entity));        
-        $form = $this->createForm(new AclType(), $data);
+        $form = $this->createForm(AclType::class, $data);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $data = $form->getData();

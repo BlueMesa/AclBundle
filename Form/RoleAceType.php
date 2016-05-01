@@ -12,6 +12,7 @@
 namespace Bluemesa\Bundle\AclBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 
@@ -28,7 +29,7 @@ class RoleAceType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('identity', 'role_typeahead', array(
+        $builder->add('identity', RoleTypeaheadType::class, array(
                         'horizontal' => false,
                         'label_render' => false,
                         'required'  => true,
@@ -39,7 +40,7 @@ class RoleAceType extends AbstractType
                         'widget_addon_prepend' => array(
                             'icon' => 'group',
                      )))
-                ->add('permission', 'choice', array(
+                ->add('permission', ChoiceType::class, array(
                         'horizontal' => false,
                         'label_render' => false,
                         'required'  => true,

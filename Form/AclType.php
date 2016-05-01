@@ -31,28 +31,28 @@ class AclType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('user_acl', CollectionType::class, array(
-                        'type' => UserAceType::class,
+                        'entry_type' => UserAceType::class,
                         'allow_add' => true,
                         'allow_delete' => true,
                         'prototype' => true,
                         'show_legend' => false,
                         'label' => 'Users',
                         'widget_add_btn' => array('label' => false, 'icon' => 'plus'),
-                        'options' => array(
+                        'entry_options' => array(
                             'label' => false,
                             'widget_remove_btn' => array('label' => false, 'icon' => 'times')),
                         'constraints' => array(
                             new UniqueOwnerIdentity('Only one user can be the owner.'),
                             new UniqueIdentities('Each user can be specified only once.'))))
                 ->add('role_acl', CollectionType::class, array(
-                        'type' => RoleAceType::class,
+                        'entry_type' => RoleAceType::class,
                         'allow_add' => true,
                         'allow_delete' => true,
                         'prototype' => true,
                         'show_legend' => false,
                         'label' => 'Groups',
                         'widget_add_btn' => array('label' => false, 'icon' => 'plus'),
-                        'options' => array(
+                        'entry_options' => array(
                             'label' => false,
                             'widget_remove_btn' => array('label' => false, 'icon' => 'times')),
                         'constraints' => array(

@@ -1,0 +1,15 @@
+{% block role_typeahead_widget %}
+  {% spaceless %}
+    {{ block('typeahead_widget') }}
+  {% endspaceless %}
+{% endblock %}
+
+{% block user_typeahead_widget %}
+  {% spaceless %}
+    {% set attr = attr|merge({
+        'class': attr.class|default('') ~ ' user-typeahead',
+        'data-link': data_link|default(''),
+        'autocomplete': 'off' }) %}
+    {{ block('form_widget_simple') }}
+  {% endspaceless %}
+{% endblock %}
