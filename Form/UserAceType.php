@@ -26,14 +26,6 @@ class UserAceType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getName()
-    {
-        return "user_ace";
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('identity', 'user_typeahead', array(

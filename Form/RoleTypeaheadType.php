@@ -12,11 +12,9 @@
 namespace Bluemesa\Bundle\AclBundle\Form;
 
 use JMS\DiExtraBundle\Annotation as DI;
-
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
-use VIB\FormsBundle\Form\DataTransformer\RoleToTextTransformer;
+use Bluemesa\Bundle\FormsBundle\Form\Type\TypeaheadType;
 
 /**
  * Bootstrap role typeahead form control
@@ -47,13 +45,5 @@ class RoleTypeaheadType extends TypeaheadType
         $resolver->setDefaults(array(
             'data_route' => 'vib_role_ajax_choices'
         ));
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    public function getName()
-    {
-        return 'role_typeahead';
     }
 }

@@ -12,10 +12,8 @@
 namespace Bluemesa\Bundle\AclBundle\Form;
 
 use JMS\DiExtraBundle\Annotation as DI;
-
-use Doctrine\Common\Persistence\ManagerRegistry;
-use Symfony\Component\Routing\Router;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Bluemesa\Bundle\CoreBundle\Form\EntityTypeaheadType;
 
 /**
  * Bootstrap user typeahead form control
@@ -38,13 +36,5 @@ class UserTypeaheadType extends EntityTypeaheadType
             'choice_label' => 'username',
             'data_route' => 'vib_user_ajax_choices'
         ));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getName()
-    {
-        return 'user_typeahead';
     }
 }
