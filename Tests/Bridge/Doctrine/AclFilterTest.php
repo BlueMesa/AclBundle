@@ -16,14 +16,14 @@
  * limitations under the License.
  */
 
-namespace VIB\SecurityBundle\Tests\Bridge\Doctrine;
+namespace Bluemesa\Bundle\SecurityBundle\Tests\Bridge\Doctrine;
 
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query\AST\SelectStatement;
 use Doctrine\ORM\Query\AST\FromClause;
 use Doctrine\ORM\Query\AST\IdentificationVariableDeclaration;
 use Doctrine\ORM\Query\AST\RangeVariableDeclaration;
-use VIB\SecurityBundle\Bridge\Doctrine\AclFilter;
+use Bluemesa\Bundle\SecurityBundle\Bridge\Doctrine\AclFilter;
 
 class AclFilterTest extends \PHPUnit_Framework_TestCase
 {

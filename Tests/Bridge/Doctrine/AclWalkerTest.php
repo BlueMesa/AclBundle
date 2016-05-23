@@ -16,9 +16,9 @@
  * limitations under the License.
  */
 
-namespace VIB\SecurityBundle\Tests\Bridge\Doctrine;
+namespace Bluemesa\Bundle\SecurityBundle\Tests\Bridge\Doctrine;
 
-use VIB\SecurityBundle\Bridge\Doctrine\AclWalker;
+use Bluemesa\Bundle\SecurityBundle\Bridge\Doctrine\AclWalker;
 
 class AclWalkerTest extends \PHPUnit_Framework_TestCase
 {
