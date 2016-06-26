@@ -18,7 +18,7 @@
 
 namespace Bluemesa\Bundle\SecurityBundle\Tests\Bridge\Doctrine;
 
-use Bluemesa\Bundle\SecurityBundle\Bridge\Doctrine\AclWalker;
+use Bluemesa\Bundle\AclBundle\Bridge\Doctrine\AclWalker;
 
 class AclWalkerTest extends \PHPUnit_Framework_TestCase
 {
