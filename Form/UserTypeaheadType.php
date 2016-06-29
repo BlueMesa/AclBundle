@@ -34,7 +34,7 @@ class UserTypeaheadType extends EntityTypeaheadType
         $resolver->setDefaults(array(
             'class' => 'Bluemesa\Bundle\UserBundle\Entity\User',
             'choice_label' => 'username',
-            'data_route' => 'vib_user_ajax_choices'
+            'data_route' => 'bluemesa_user_ajax_choices'
         ));
     }
 }

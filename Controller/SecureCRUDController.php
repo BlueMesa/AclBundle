@@ -11,6 +11,7 @@
 
 namespace Bluemesa\Bundle\AclBundle\Controller;
 
+use Bluemesa\Bundle\AclBundle\Doctrine\OwnedObjectManager;
 use Bluemesa\Bundle\AclBundle\Doctrine\OwnedObjectManagerInterface;
 use Bluemesa\Bundle\AclBundle\Doctrine\SecureObjectManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -60,9 +61,14 @@ abstract class SecureCRUDController extends CRUDController
         $this->verifyPermission($entity, 'VIEW');
         /** @var SecureObjectManagerInterface|OwnedObjectManagerInterface $om */
         $om = $this->getObjectManager();
-        $owner = $om->getOwner($entity);
+        if ($om instanceof OwnedObjectManager) {
+            $owner = $om->getOwner($entity);
+            $result = array_merge(parent::showAction($request, $entity), array('owner' => $owner));
+        } else {
+            $result = parent::showAction($request, $entity);
+        }
         
-        return array_merge(parent::showAction($request, $entity), array('owner' => $owner));
+        return $result;
     }
 
     /**

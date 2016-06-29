@@ -43,7 +43,7 @@ class RoleTypeaheadType extends TypeaheadType
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'data_route' => 'vib_role_ajax_choices'
+            'data_route' => 'bluemesa_role_ajax_choices'
         ));
     }
 }
