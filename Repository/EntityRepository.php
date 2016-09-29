@@ -34,6 +34,10 @@ class EntityRepository extends BaseEntityRepository
      */
     public function getListQuery(ListFilterInterface $filter = null)
     {
+        if ((null === $filter)&&($this->filter instanceof ListFilterInterface)) {
+            $filter = $this->filter;
+        }
+
         $qb = $this->getListQueryBuilder($filter);
         
         if ($filter instanceof SecureFilterInterface) {
@@ -56,6 +60,10 @@ class EntityRepository extends BaseEntityRepository
      */
     public function getCountQuery(ListFilterInterface $filter = null)
     {
+        if ((null === $filter)&&($this->filter instanceof ListFilterInterface)) {
+            $filter = $this->filter;
+        }
+
         $qb = $this->getCountQueryBuilder($filter);
         
         if ($filter instanceof SecureFilterInterface) {
