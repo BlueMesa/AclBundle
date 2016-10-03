@@ -16,6 +16,8 @@ use Bluemesa\Bundle\AclBundle\DependencyInjection\AclFilterAwareTrait;
 use Bluemesa\Bundle\CoreBundle\Filter\ListFilterInterface;
 use Bluemesa\Bundle\CoreBundle\Repository\EntityRepository as BaseEntityRepository;
 use Bluemesa\Bundle\AclBundle\Filter\SecureFilterInterface;
+use Bluemesa\Bundle\CoreBundle\Repository\FilteredRepositoryInterface;
+use Bluemesa\Bundle\CoreBundle\Repository\FilteredRepositoryTrait;
 
 
 /**
@@ -23,9 +25,10 @@ use Bluemesa\Bundle\AclBundle\Filter\SecureFilterInterface;
  *
  * @author Radoslaw Kamil Ejsmont <radoslaw@ejsmont.net>
  */
-class EntityRepository extends BaseEntityRepository
+class EntityRepository extends BaseEntityRepository implements FilteredRepositoryInterface
 {
     use AclFilterAwareTrait;
+    use FilteredRepositoryTrait;
 
     /**
      *
