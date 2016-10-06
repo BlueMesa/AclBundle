@@ -18,6 +18,8 @@ use Bluemesa\Bundle\CoreBundle\Repository\EntityRepository as BaseEntityReposito
 use Bluemesa\Bundle\AclBundle\Filter\SecureFilterInterface;
 use Bluemesa\Bundle\CoreBundle\Repository\FilteredRepositoryInterface;
 use Bluemesa\Bundle\CoreBundle\Repository\FilteredRepositoryTrait;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 
 
 /**
@@ -29,6 +31,41 @@ class EntityRepository extends BaseEntityRepository implements FilteredRepositor
 {
     use AclFilterAwareTrait;
     use FilteredRepositoryTrait;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createIndexQuery()
+    {
+        return $this->secureQuery($this->createIndexQueryBuilder(), parent::createIndexQuery());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createCountQuery()
+    {
+        return $this->secureQuery($this->createCountQueryBuilder(), parent::createCountQuery());
+    }
+
+    /**
+     * @param  QueryBuilder  $qb     Query builder to secure
+     * @param  Query         $query  Fallback unsecured query
+     * @return Query
+     */
+    protected function secureQuery($qb, $query)
+    {
+        if ($this->filter instanceof SecureFilterInterface) {
+            $permissions = $this->filter->getPermissions();
+            $user = $this->filter->getUser();
+        } else {
+            $permissions = array();
+            $user = null;
+        }
+
+        return (false === $permissions) ?
+            $query : $this->getAclFilter()->apply($qb, $permissions, $user);
+    }
 
     /**
      *
