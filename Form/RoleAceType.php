@@ -49,12 +49,12 @@ class RoleAceType extends AbstractType
                         'error_bubbling' => true,
                         'widget_form_group_attr' => array('class' => 'col-sm-4'),
                         'choices' => array(
-                            0 => 'None',
-                            MaskBuilder::MASK_VIEW => 'View',
-                            MaskBuilder::MASK_EDIT => 'Edit',
-                            MaskBuilder::MASK_OPERATOR => 'Operator',
-                            MaskBuilder::MASK_MASTER => 'Master',
-                            MaskBuilder::MASK_OWNER => 'Owner',
+                            'None'     => 0,
+                            'View'     => MaskBuilder::MASK_VIEW,
+                            'Edit'     => MaskBuilder::MASK_EDIT,
+                            'Operator' => MaskBuilder::MASK_OPERATOR,
+                            'Master'   => MaskBuilder::MASK_MASTER,
+                            'Owner'    => MaskBuilder::MASK_OWNER,
                         )));
     }
 }
