@@ -14,7 +14,6 @@ namespace Bluemesa\Bundle\AclBundle\Filter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-
 use Bluemesa\Bundle\CoreBundle\Filter\ListFilterInterface;
 
 
@@ -23,11 +22,23 @@ use Bluemesa\Bundle\CoreBundle\Filter\ListFilterInterface;
  * @author Radoslaw Kamil Ejsmont <radoslaw@ejsmont.net>
  */
 class SecureListFilter implements ListFilterInterface, SecureFilterInterface {
-    
+
+    /**
+     * @var string
+     */
     protected $access;
+
+    /**
+     * @var AuthorizationCheckerInterface
+     */
     protected $authorizationChecker;
+
+    /**
+     * @var TokenStorageInterface
+     */
     protected $tokenStorage;
-    
+
+
     /**
      * Construct SecureListFilter
      *
