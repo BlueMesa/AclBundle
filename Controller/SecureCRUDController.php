@@ -128,13 +128,10 @@ abstract class SecureCRUDController extends CRUDController
         $this->verifyPermission($entity, 'MASTER');
         /** @var SecureObjectManagerInterface|OwnedObjectManagerInterface $om */
         $om = $this->getObjectManager();
-        $data = $this->splitAcl($om->getACL($entity));        
-        $form = $this->createForm(AclType::class, $data);
+        $form = $this->createForm(AclType::class, $om->getACL($entity));
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $data = $form->getData();
-            $acl_array = array_merge($data['user_acl'], $data['role_acl']);
-            $om->updateACL($entity, $acl_array);
+            $om->updateACL($entity, $form->getData());
             $message = 'Changes to ' . $this->getEntityName() . ' ' . $entity . ' permissions were saved.';
             $this->addSessionFlash('success', $message);
             $route = str_replace("_permissions", "_show", $request->attributes->get('_route'));
@@ -160,30 +157,5 @@ abstract class SecureCRUDController extends CRUDController
 
             throw new AccessDeniedException();
         }
-    }
-    
-    /**
-     * Merge user and group ACLs into single ACL
-     * 
-     * @param  array  $acl_array
-     * @return array
-     */
-    protected function splitAcl($acl_array)
-    {
-        $data = array(
-            'user_acl' => array(),
-            'role_acl' => array()
-        );
-                
-        foreach($acl_array as $acl_entry) {
-            $identity = $acl_entry['identity'];
-            if ($identity instanceof UserInterface) {
-                $data['user_acl'][] = $acl_entry;
-            } else if (is_string($identity)) {
-                $data['role_acl'][] = $acl_entry;
-            }
-        }
-        
-        return $data;
     }
 }

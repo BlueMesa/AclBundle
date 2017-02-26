@@ -57,6 +57,7 @@ class AclType extends AbstractType
                             'widget_remove_btn' => array('label' => false, 'icon' => 'times')),
                         'constraints' => array(
                             new UniqueOwnerIdentity('Only one group can be the owner.'),
-                            new UniqueIdentities('Each group can be specified only once.'))));
+                            new UniqueIdentities('Each group can be specified only once.'))))
+                ->addViewTransformer(new AclArrayTransformer());
     }
 }

@@ -32,7 +32,7 @@ class RoleTypeaheadType extends TypeaheadType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $transformer = new RoleToTextTransformer();
-        $builder->addModelTransformer($transformer);
+        $builder->addViewTransformer($transformer);
     }
     
     /**
