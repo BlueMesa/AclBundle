@@ -14,7 +14,7 @@ namespace Bluemesa\Bundle\AclBundle\Controller;
 
 
 use Bluemesa\Bundle\AclBundle\Request\AclHandler;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 trait AclControllerTrait
 {
@@ -23,8 +23,8 @@ trait AclControllerTrait
      */
     public function getAclHandler()
     {
-        if (! $this instanceof ContainerAwareTrait) {
-            throw new \LogicException("Calling class be an instance of ContainerAwareTrait");
+        if ((! property_exists($this, 'container'))||(! $this->container instanceof ContainerInterface)) {
+            throw new \LogicException("Calling class must have container property set to ContainerInterface instance");
         }
 
         return $this->container->get('bluemesa.acl.handler');

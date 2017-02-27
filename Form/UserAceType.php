@@ -36,7 +36,7 @@ class UserAceType extends AbstractType
                         'required'  => true,
                         'show_legend' => false,
                         'horizontal_input_wrapper_class' => '',
-                        'widget_form_group_attr' => array('class' => 'col-sm-5'),
+                        'widget_form_group_attr' => array('class' => 'col-sm-8'),
                         'error_bubbling' => true,
                         'widget_addon_prepend' => array(
                             'icon' => 'user',

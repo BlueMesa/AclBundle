@@ -13,8 +13,27 @@
 namespace Bluemesa\Bundle\AclBundle\Event;
 
 
+use Bluemesa\Bundle\CoreBundle\Entity\EntityInterface;
 use Bluemesa\Bundle\CrudBundle\Event\EntityModificationEvent;
+use FOS\RestBundle\View\View;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class PermissionsActionEvent extends EntityModificationEvent
 {
+    /**
+     * PermissionsActionEvent constructor.
+     *
+     * @param Request $request
+     * @param EntityInterface $entity
+     * @param FormInterface $form
+     * @param View $view
+     */
+    public function __construct(Request $request, EntityInterface $entity, FormInterface $form, View $view = null)
+    {
+        $this->request = $request;
+        $this->entity = $entity;
+        $this->form = $form;
+        $this->view = $view;
+    }
 }

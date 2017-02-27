@@ -71,6 +71,9 @@ class AclHandler extends AbstractHandler
         $entity = $request->get('entity');
         $om = $this->registry->getManagerForClass($entity);
 
+        dump($entity);
+        dump($om);
+
         if (! $om instanceof SecureObjectManagerInterface) {
             throw new \LogicException("Permissions can only be modified in entities managed " .
                 "by an instance of SecureObjectManagerInterface");
@@ -107,6 +110,8 @@ class AclHandler extends AbstractHandler
 
         $event = new PermissionsActionEvent($request, $entity, $form, $view);
         $this->dispatcher->dispatch(AclControllerEvents::PERMISSIONS_COMPLETED, $event);
+
+        dump($event->getView());
 
         return $event->getView();
     }

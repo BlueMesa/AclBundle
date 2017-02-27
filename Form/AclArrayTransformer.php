@@ -43,7 +43,7 @@ class AclArrayTransformer implements DataTransformerInterface
                 $data['user_acl'][] = $acl_entry;
             } else if (is_string($identity)) {
                 $data['role_acl'][] = $acl_entry;
-            } else {
+            } else if (null !== $identity) {
                 throw new TransformationFailedException("Invalid ACL array supplied");
             }
         }
