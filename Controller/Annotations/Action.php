@@ -12,6 +12,8 @@
 
 namespace Bluemesa\Bundle\AclBundle\Controller\Annotations;
 
+use Bluemesa\Bundle\CoreBundle\Controller\Annotations\Action as BaseAction;
+
 
 /**
  * Action Annotation
@@ -21,41 +23,6 @@ namespace Bluemesa\Bundle\AclBundle\Controller\Annotations;
  *
  * @author Radoslaw Kamil Ejsmont <radoslaw@ejsmont.net>
  */
-class Action
+class Action extends BaseAction
 {
-    /**
-     * @var string
-     */
-    public $name;
-
-    /**
-     * @var string
-     */
-    public $redirect_route;
-
-
-    /**
-     * Action Annotation constructor.
-     */
-    public function __construct()
-    {
-        $this->name = null;
-        $this->redirect_route = null;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAction()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRedirectRoute()
-    {
-        return $this->redirect_route;
-    }
 }

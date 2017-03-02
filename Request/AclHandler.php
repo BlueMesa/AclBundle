@@ -18,6 +18,7 @@ use Bluemesa\Bundle\AclBundle\Event\AclControllerEvents;
 use Bluemesa\Bundle\AclBundle\Event\PermissionsActionEvent;
 use Bluemesa\Bundle\AclBundle\Form\AclType;
 use Bluemesa\Bundle\CoreBundle\Entity\Entity;
+use Bluemesa\Bundle\CoreBundle\EventListener\RoutePrefixTrait;
 use Bluemesa\Bundle\CoreBundle\Request\AbstractHandler;
 use FOS\RestBundle\View\View;
 use JMS\DiExtraBundle\Annotation as DI;
@@ -34,6 +35,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class AclHandler extends AbstractHandler
 {
+    use RoutePrefixTrait;
+
     /**
      * This method calls a proper handler for the incoming request
      *
@@ -44,14 +47,14 @@ class AclHandler extends AbstractHandler
      */
     public function handle(Request $request)
     {
-        $action = $request->get('acl_action');
+        $action = $request->get('action');
         switch($action) {
             case 'permissions':
                 $result = $this->handlePermissionsAction($request);
                 break;
             default:
                 $message  = "The action '" . $action;
-                $message .= "' is not one of the allowed CRUD actions ('index', 'show', 'new', 'edit', 'delete').";
+                $message .= "' is not one of the allowed ACL actions ('permissions').";
                 throw new \LogicException($message);
         }
 
@@ -59,7 +62,7 @@ class AclHandler extends AbstractHandler
     }
 
     /**
-     * This method handles edit action requests.
+     * This method handles permissions action requests.
      *
      * @param Request $request
      *
@@ -70,9 +73,6 @@ class AclHandler extends AbstractHandler
         /** @var Entity $entity */
         $entity = $request->get('entity');
         $om = $this->registry->getManagerForClass($entity);
-
-        dump($entity);
-        dump($om);
 
         if (! $om instanceof SecureObjectManagerInterface) {
             throw new \LogicException("Permissions can only be modified in entities managed " .
@@ -100,8 +100,7 @@ class AclHandler extends AbstractHandler
             $this->dispatcher->dispatch(AclControllerEvents::PERMISSIONS_SUCCESS, $event);
 
             if (null === $view = $event->getView()) {
-                $route = $request->get('permissions_redirect_route');
-                $view = View::createRouteRedirect($route, array('id' => $entity->getId()));
+                $view = View::createRouteRedirect($this->getRedirectRoute($request));
             }
 
         } else {
@@ -111,8 +110,24 @@ class AclHandler extends AbstractHandler
         $event = new PermissionsActionEvent($request, $entity, $form, $view);
         $this->dispatcher->dispatch(AclControllerEvents::PERMISSIONS_COMPLETED, $event);
 
-        dump($event->getView());
-
         return $event->getView();
+    }
+
+    /**
+     * @param  Request $request
+     * @return string
+     */
+    private function getRedirectRoute(Request $request)
+    {
+        $route = $request->get('redirect');
+        if (null === $route) {
+            switch($request->get('action')) {
+                case 'permissions':
+                    $route = $this->getPrefix($request) . 'show';
+                    break;
+            }
+        }
+
+        return $route;
     }
 }
