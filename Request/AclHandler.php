@@ -79,7 +79,7 @@ class AclHandler extends AbstractHandler
                 "by an instance of SecureObjectManagerInterface");
         }
 
-        $form = $this->factory->create(AclType::class, $om->getACL($entity));
+        $form = $this->factory->create(AclType::class, $om->getACL($entity), array('method' => 'PUT'));
 
         $event = new PermissionsActionEvent($request, $entity, $form);
         $this->dispatcher->dispatch(AclControllerEvents::PERMISSIONS_INITIALIZE, $event);
@@ -100,7 +100,7 @@ class AclHandler extends AbstractHandler
             $this->dispatcher->dispatch(AclControllerEvents::PERMISSIONS_SUCCESS, $event);
 
             if (null === $view = $event->getView()) {
-                $view = View::createRouteRedirect($this->getRedirectRoute($request));
+                $view = View::createRouteRedirect($this->getRedirectRoute($request), array('id' => $entity->getId()));
             }
 
         } else {
