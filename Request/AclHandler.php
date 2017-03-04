@@ -17,10 +17,10 @@ use Bluemesa\Bundle\AclBundle\Doctrine\SecureObjectManagerInterface;
 use Bluemesa\Bundle\AclBundle\Event\AclControllerEvents;
 use Bluemesa\Bundle\AclBundle\Event\PermissionsActionEvent;
 use Bluemesa\Bundle\AclBundle\Form\AclType;
-use Bluemesa\Bundle\CoreBundle\Entity\Entity;
 use Bluemesa\Bundle\CoreBundle\EventListener\RoutePrefixTrait;
 use Bluemesa\Bundle\CoreBundle\Request\AbstractHandler;
 use Bluemesa\Bundle\CoreBundle\Request\FormHandlerTrait;
+use Bluemesa\Bundle\CrudBundle\Event\EntityModificationEvent;
 use FOS\RestBundle\View\View;
 use JMS\DiExtraBundle\Annotation as DI;
 use Symfony\Component\HttpFoundation\Request;
@@ -88,7 +88,7 @@ class AclHandler extends AbstractHandler
             'completed' => AclControllerEvents::PERMISSIONS_COMPLETED
         );
 
-        $handler = function(Request $request, EntityEvent $event) use ($om) {
+        $handler = function(Request $request, EntityModificationEvent $event) use ($om) {
             $entity = $event->getEntity();
             $form = $event->getForm();
             $om->updateACL($entity, $form->getData());
