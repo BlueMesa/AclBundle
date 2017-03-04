@@ -20,6 +20,7 @@ use Bluemesa\Bundle\AclBundle\Form\AclType;
 use Bluemesa\Bundle\CoreBundle\Entity\Entity;
 use Bluemesa\Bundle\CoreBundle\EventListener\RoutePrefixTrait;
 use Bluemesa\Bundle\CoreBundle\Request\AbstractHandler;
+use Bluemesa\Bundle\CoreBundle\Request\FormHandlerTrait;
 use FOS\RestBundle\View\View;
 use JMS\DiExtraBundle\Annotation as DI;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,6 +37,7 @@ use Symfony\Component\HttpFoundation\Request;
 class AclHandler extends AbstractHandler
 {
     use RoutePrefixTrait;
+    use FormHandlerTrait;
 
     /**
      * This method calls a proper handler for the incoming request
@@ -70,64 +72,51 @@ class AclHandler extends AbstractHandler
      */
     public function handlePermissionsAction(Request $request)
     {
-        /** @var Entity $entity */
         $entity = $request->get('entity');
         $om = $this->registry->getManagerForClass($entity);
-
         if (! $om instanceof SecureObjectManagerInterface) {
             throw new \LogicException("Permissions can only be modified in entities managed " .
                 "by an instance of SecureObjectManagerInterface");
         }
-
         $form = $this->factory->create(AclType::class, $om->getACL($entity), array('method' => 'PUT'));
 
-        $event = new PermissionsActionEvent($request, $entity, $form);
-        $this->dispatcher->dispatch(AclControllerEvents::PERMISSIONS_INITIALIZE, $event);
+        $events = array(
+            'class' => PermissionsActionEvent::class,
+            'initialize' => AclControllerEvents::PERMISSIONS_INITIALIZE,
+            'submitted' => AclControllerEvents::PERMISSIONS_SUBMITTED,
+            'success' => AclControllerEvents::PERMISSIONS_SUCCESS,
+            'completed' => AclControllerEvents::PERMISSIONS_COMPLETED
+        );
 
-        if (null !== $event->getView()) {
-            return $event->getView();
-        }
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $event = new PermissionsActionEvent($request, $entity, $form);
-            $this->dispatcher->dispatch(AclControllerEvents::PERMISSIONS_SUBMITTED, $event);
-
+        $handler = function(Request $request, EntityEvent $event) use ($om) {
+            $entity = $event->getEntity();
+            $form = $event->getForm();
             $om->updateACL($entity, $form->getData());
 
-            $event = new PermissionsActionEvent($request, $entity, $form, $event->getView());
-            $this->dispatcher->dispatch(AclControllerEvents::PERMISSIONS_SUCCESS, $event);
+            return $entity;
+        };
 
-            if (null === $view = $event->getView()) {
-                $view = View::createRouteRedirect($this->getRedirectRoute($request), array('id' => $entity->getId()));
-            }
-
-        } else {
-            $view = View::create(array('entity' => $entity, 'form' => $form->createView()));
-        }
-
-        $event = new PermissionsActionEvent($request, $entity, $form, $view);
-        $this->dispatcher->dispatch(AclControllerEvents::PERMISSIONS_COMPLETED, $event);
-
-        return $event->getView();
+        return $this->handleFormRequest($request, $entity, $form, $events, $handler);
     }
 
     /**
      * @param  Request $request
+     * @param  mixed   $entity
      * @return string
      */
-    private function getRedirectRoute(Request $request)
+    protected function getRedirect(Request $request, $entity)
     {
         $route = $request->get('redirect');
+        $parameters = array();
         if (null === $route) {
             switch($request->get('action')) {
                 case 'permissions':
                     $route = $this->getPrefix($request) . 'show';
+                    $parameters = array('id' => $entity->getId());
                     break;
             }
         }
 
-        return $route;
+        return array('route' => $route, 'parameters' => $parameters);
     }
 }
